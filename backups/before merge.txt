@@ -1,0 +1,280 @@
+package com.company;
+
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Game extends Application {
+
+    static final Group group = new Group();
+    static final Scene scene = new Scene(group, 1920, 1080);
+    static ImageView hero = new ImageView("file:E:\\game\\link_running_down_1.png");
+    static ImageView northDoor = new ImageView("file:E:\\game\\door_up.png");
+    static ImageView southDoor = new ImageView("file:E:\\game\\door_down.png");
+    static ImageView eastDoor = new ImageView("file:E:\\game\\door_right.png");
+    static ImageView westDoor = new ImageView("file:E:\\game\\door_left.png");
+    static ImageView bossDoor = new ImageView("file:E:\\game\\door_boss_closed.png");
+    static Image bossDoor_closed = new Image("file:E:\\game\\door_boss_closed.png");
+    static int positionX = 9;
+    static int positionY = 9;
+    static ArrayList<Enemy> enemies = new ArrayList<>();
+    static ArrayList<Items> items = new ArrayList<>();
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) {
+        //doors
+
+        Image bossDoor_open = new Image("file:E:\\game\\door_boss_open.png");
+
+        northDoor.relocate(879, 0);
+        bossDoor.relocate(879, 0);
+        southDoor.relocate(879, 1010);
+        westDoor.relocate(0, 460);
+        eastDoor.relocate(1850, 460);
+        bossDoor.setVisible(false);
+        group.getChildren().addAll(northDoor, southDoor, eastDoor, westDoor, bossDoor);
+        //
+        Random rand = new Random();
+        int[][] map = new int[19][19];
+        mapMaker(map, rand);
+        group.getChildren().add(hero);
+        hero.relocate(885, 540);
+        InputManager(map);
+        stage.setFullScreenExitHint("");
+        stage.setFullScreen(true);
+        stage.setTitle("Cool game");
+        stage.setScene(scene);
+        doorChanger(map);
+        itemChanger();
+        stage.show();
+
+    }
+
+    private void InputManager(int[][] map) {
+        try {
+            scene.setOnKeyPressed(event -> {
+                switch (event.getCode()) {
+                    case UP:
+                        hero.relocate(hero.getLayoutX(), hero.getLayoutY() - 10);
+                        roomChanger(map);
+                        //System.out.println((hero.getLayoutX() + 75) + " " + (hero.getLayoutY() - 80.5));
+                        break;
+                    case DOWN:
+                        hero.relocate(hero.getLayoutX(), hero.getLayoutY() + 10);
+                        roomChanger(map);
+                        //System.out.println((hero.getLayoutX() + 75) + " " + (hero.getLayoutY() - 80.5));
+                        break;
+                    case LEFT:
+                        hero.relocate(hero.getLayoutX() - 10, hero.getLayoutY());
+                        roomChanger(map);
+                        //System.out.println((hero.getLayoutX() + 75) + " " + (hero.getLayoutY() - 80.5));
+                        break;
+                    case RIGHT:
+                        hero.relocate(hero.getLayoutX() + 10, hero.getLayoutY());
+                        roomChanger(map);
+                        //System.out.println((hero.getLayoutX() + 75) + " " + (hero.getLayoutY() - 80.5));
+                        break;
+                }
+            });
+        } catch (Exception e) {
+            System.out.println("error");
+        }
+    }
+
+    private void roomChanger(int[][] map) {
+        if (hero.getBoundsInParent().intersects(northDoor.getBoundsInParent())) {
+            System.out.println("north door");
+            positionY = positionY - 1;
+            doorChanger(map);
+            enemyChanger();
+            itemChanger();
+            System.out.println("now in room " + positionY + " " + positionX);
+            System.out.println(map[positionY][positionX]);
+            hero.relocate((960) - 75, 750);
+        }
+        if (hero.getBoundsInParent().intersects(southDoor.getBoundsInParent())) {
+            System.out.println("south door");
+            positionY = positionY + 1;
+            doorChanger(map);
+            enemyChanger();
+            itemChanger();
+            System.out.println("now in room " + positionY + " " + positionX);
+            System.out.println(map[positionY][positionX]);
+            hero.relocate((960) - 75, 150);
+        }
+        if (hero.getBoundsInParent().intersects(eastDoor.getBoundsInParent())) {
+            System.out.println("west door");
+            positionX = positionX + 1;
+            doorChanger(map);
+            enemyChanger();
+            itemChanger();
+            System.out.println("now in room " + positionY + " " + positionX);
+            System.out.println(map[positionY][positionX]);
+            hero.relocate(150 - 75, 400 + 81);
+        }
+        if (hero.getBoundsInParent().intersects(westDoor.getBoundsInParent())) {
+            System.out.println("east door");
+            positionX = positionX - 1;
+            doorChanger(map);
+            enemyChanger();
+            itemChanger();
+            System.out.println("now in room " + positionY + " " + positionX);
+            System.out.println(map[positionY][positionX]);
+            hero.relocate(1765 - 75, 400 + 81);
+        }
+    }
+
+    private void doorChanger(int[][] map) {
+        if (map[positionY - 1][positionX] == 1 || map[positionY - 1][positionX] == 2) {
+            northDoor.setVisible(true);
+        } else {
+            northDoor.setVisible(false);
+        }
+        if (map[positionY - 1][positionX] == 3) {
+            bossDoor.setVisible(true);
+        } else {
+            bossDoor.setVisible(false);
+        }
+        if ((map[positionY + 1][positionX] == 1)) {
+            southDoor.setVisible(true);
+        } else {
+            southDoor.setVisible(false);
+        }
+        if ((map[positionY][positionX + 1] == 1)) {
+            eastDoor.setVisible(true);
+        } else {
+            eastDoor.setVisible(false);
+        }
+        if ((map[positionY][positionX - 1] == 1)) {
+            westDoor.setVisible(true);
+        } else {
+            westDoor.setVisible(false);
+        }
+    }
+
+    private static void mapMaker(int[][] map, Random rand) {
+        int localRooms = 0;
+        for (int i = 0; i < 19; i++) {
+            for (int j = 0; j < 19; j++) {
+                map[i][j] = 0;
+            }
+        }
+        map[9][9] = 1;
+        int distanceFromNodeX = -1;//ABOVE THE STARTING POINT
+        int distanceFromNodeY = 0;
+        double constant = 10;
+        int NoOfRooms = 1;
+        mapGenerator(map, distanceFromNodeX, distanceFromNodeY, constant, rand, NoOfRooms);
+        int k = 0;
+        //counts rooms and adds shop room
+        for (int i = 0; i < 19; i++) {
+            for (int j = 0; j < 19; j++) {
+                if (map[i][j] == 1) {
+                    enemies.add(new Enemy(i, j));
+                    items.add(new Items(i, j));
+                    localRooms++;
+                }
+                if (map[i][j] == 1 && k == 0) {
+                    map[i - 1][j] = 3;
+                    k = 1;
+                    localRooms++;
+                }
+                //1 room
+                //0 empty
+                //2 SHOP
+                //3 BOSS
+                if (map[i][j] == 1 && k == 1 && map[i - 1][j] == 0 && localRooms > 3) {
+                    map[i - 1][j] = 2;
+                    k = 2;
+                    localRooms++;
+                }
+            }
+        }
+        for (Enemy enemy : enemies) {
+            if (!(enemy.getRoomX() == 9 && enemy.getRoomY() == 9)) {
+                enemy.getImage().setLayoutX(enemy.getLayoutX());
+                enemy.getImage().setLayoutY(enemy.getLayoutY());
+                enemy.getImage().setVisible(false);
+                //System.out.println(enemy.getRoomX() + " " + enemy.getRoomY());
+                group.getChildren().add(enemy.getImage());
+            }
+        }
+        for (Items item : items) {
+            item.getImage().setLayoutX(item.getLayoutX());
+            item.getImage().setLayoutY(item.getLayoutY());
+            item.getImage().setVisible(false);
+            group.getChildren().add(item.getImage());
+        }
+
+        //outputs the map
+        System.out.println("O  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 COLUMN/ J");
+        for (int i = 0; i < 19; i++) {
+            for (int j = 0; j < 19; j++) {
+                System.out.print(map[i][j] + "  ");
+            }
+            System.out.println("");
+        }
+        //
+        System.out.println(localRooms + " Rooms");
+        //System.out.println(NoOfRooms);
+    }
+
+    private static void enemyChanger() {
+        for (Enemy enemy : enemies) {
+            if (positionX == enemy.getRoomY() && positionY == enemy.getRoomX()) {
+                enemy.getImage().setVisible(true);
+            } else {
+                enemy.getImage().setVisible(false);
+
+            }
+        }
+    }
+
+    private static void itemChanger() {
+        for (int i = 0; i < items.size(); i++) {
+            Items item = items.get(i);
+            if (positionX == item.getRoomY() && positionY == item.getRoomX()) {
+                item.getImage().setVisible(true);
+            } else {
+                item.getImage().setVisible(false);
+            }
+
+        }
+    }
+
+    private static void mapGenerator(int[][] map, int distanceFromNodeX, int distanceFromNodeY, double constant, Random rand, int NoOfRooms) {
+        if (NoOfRooms < 12) {
+            int direction = rand.nextInt(4);
+            map[9 + distanceFromNodeX][9 + distanceFromNodeY] = 1;
+            NoOfRooms++;
+            switch (direction) {
+                case 0:
+                    distanceFromNodeX = distanceFromNodeX - 1;
+                    break;
+                case 1:
+                    distanceFromNodeX = distanceFromNodeX + 1;
+                    break;
+                case 2:
+                    distanceFromNodeY = distanceFromNodeY - 1;
+                    break;
+                case 3:
+                    distanceFromNodeY = distanceFromNodeY + 1;
+                    break;
+            }
+            mapGenerator(map, distanceFromNodeX, distanceFromNodeY, constant, rand, NoOfRooms);
+
+        }
+    }
+}

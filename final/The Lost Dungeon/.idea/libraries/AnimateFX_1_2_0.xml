@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="AnimateFX-1.2.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../backups/map generator/lib/AnimateFX-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/mssql-jdbc-6.3.3.jre8-preview.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/intellij-reference-diagram.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

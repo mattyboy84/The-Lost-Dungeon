@@ -1,0 +1,19 @@
+
+
+
+https://www.aqa.org.uk/subjects/computer-science-and-it/as-and-a-level/computer-science-7516-7517/subject-content-a-level/non-exam-assessment-the-computing-practical-project
+https://filestore.aqa.org.uk/resources/computing/AQA-7517-NEA-GUIDE.PDF
+
+
+
+
+
+shop items should be generated in the items class, always keep at the end of array. pressing E switches into item name - more effecient.
+
+hero and boss should be their own class to better deal with global variables.
+
+Insects could be dynamically generaed and their paths could be rigid multifractal nosie that they follow in some sort of loop.
+
+Extend game to have multiple 'floors' increasing difficulty. Use dyanmic arrays to generate chests, more/better items as difficulty increases.
+
+Chest at end of game could be in a chest dynamic array, kept at the ned of the array as ones before should appear in the dungeon.

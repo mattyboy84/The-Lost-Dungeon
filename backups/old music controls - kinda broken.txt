@@ -1,0 +1,18 @@
+ /*
+        if (musicVolume2 == 1) {//mutes sound
+            musicVolume2 = 0;
+            if (activeBoss == false) {//this means backgorund music is playing
+                mplayer5.pause();
+            } else if (activeBoss == true) {//this means boss music is playing
+                mplayer4.pause();
+            }
+        } else if (musicVolume2 == 0) {//resumes sound
+            musicVolume2 = 1;
+            if (activeBoss == true) {
+                sound = "boss";
+                soundManager();
+            } else if (activeBoss == false) {
+                mplayer5.play();
+            }
+        }
+        */

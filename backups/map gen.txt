@@ -1,0 +1,74 @@
+package com.company;
+
+
+import java.io.DataInputStream;
+import java.util.Arrays;
+import java.util.Random;
+
+public class Main {
+    //1 room
+    //0 empty
+    //2 SHOP
+    //3 BOSS
+
+    public static void main(String[] args) {
+        Random rand = new Random();
+        int[][] map = new int[19][19];
+        mapThing(map, rand);
+    }
+
+    private static void mapThing(int[][] map, Random rand) {
+        int localRooms = 0;
+        for (int i = 0; i < 19; i++) {
+            for (int j = 0; j < 19; j++) {
+                map[i][j] = 0;
+            }
+        }
+        map[9][9] = 1;
+
+        int distanceFromNodeX = -1;//ABOVE THE STARTING POINT
+        int distanceFromNodeY = 0;
+        double constant = 10;
+        int NoOfRooms = 1;
+        mapGenerater(map, distanceFromNodeX, distanceFromNodeY, constant, rand, NoOfRooms);
+
+        for (int i = 0; i < 19; i++) {
+            for (int j = 0; j < 19; j++) {
+                System.out.print(map[i][j] + " ");
+                if (map[i][j] == 1) {
+                    localRooms++;
+                }
+            }
+            System.out.println("");
+        }
+        System.out.println(localRooms + " Rooms");
+        //System.out.println(NoOfRooms);
+    }
+
+    private static void mapGenerater(int[][] map, int distanceFromNodeX, int distanceFromNodeY, double constant, Random rand, int NoOfRooms) {
+        if (NoOfRooms < 11) {
+            int num = rand.nextInt(11);
+            if (num <= (int) constant) {
+                //constant = constant / 1.1;
+                int direction = rand.nextInt(4);
+                map[9 + distanceFromNodeX][9 + distanceFromNodeY] = 1;
+                NoOfRooms++;
+                switch (direction) {
+                    case 0:
+                        distanceFromNodeX = distanceFromNodeX - 1;
+                        break;
+                    case 1:
+                        distanceFromNodeX = distanceFromNodeX + 1;
+                        break;
+                    case 2:
+                        distanceFromNodeY = distanceFromNodeY - 1;
+                        break;
+                    case 3:
+                        distanceFromNodeY = distanceFromNodeY + 1;
+                        break;
+                }
+                mapGenerater(map, distanceFromNodeX, distanceFromNodeY, constant, rand, NoOfRooms);
+            }
+        }
+    }
+}
